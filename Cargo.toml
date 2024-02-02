@@ -3,4 +3,12 @@ name = "zkml-benchmark"
 version = "0.1.0"
 edition = "2021"
 
+[workspace]
+members = [
+    "cairo_stack/cairo_runner"
+]
+default-members = [
+    "cairo_stack/cairo_runner",
+]
+
 [dependencies]

@@ -1,0 +1,34 @@
+[package]
+name = "cairo_runner"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cairo-vm = { git = "https://github.com/lambdaclass/cairo-vm.git", rev = "1a78237", features = [
+    "std",
+    "cairo-1-hints",
+] }
+cairo-lang-sierra-type-size = { version = "2.3.1", default-features = false }
+cairo-lang-sierra-ap-change = { version = "2.3.1", default-features = false }
+cairo-lang-sierra-gas = { version = "2.3.1", default-features = false }
+cairo-lang-casm = { version = "2.4.2", default-features = false }
+cairo-lang-compiler = { version = "2.4.2", default-features = false }
+cairo-lang-sierra-to-casm = { version = "2.4.2", default-features = false }
+cairo-lang-sierra = { version = "2.4.2", default-features = false }
+cairo-lang-utils = { version = "2.4.2", default-features = false }
+bincode = { version = "2.0.0-rc.3", default-features = false, features = [
+    "serde",
+] }
+itertools = "0.11.0"
+thiserror = { version = "1.0.40" }
+clap = "3.0"
+serde_json = { version = "1.0", features = [
+    "arbitrary_precision",
+    "alloc",
+], default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+sys-info = "0.9"
+tracing = "0.1.40"
+tokio = { version = "1.32.0", features = ["macros", "full"] }
