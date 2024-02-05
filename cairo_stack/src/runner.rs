@@ -35,6 +35,7 @@ use cairo_vm::cairo_run::EncodeTraceError;
 use cairo_vm::hint_processor::cairo_1_hint_processor::hint_processor::Cairo1HintProcessor;
 use cairo_vm::serde::deserialize_program::BuiltinName;
 use cairo_vm::serde::deserialize_program::{ApTracking, FlowTrackingData, HintParams};
+use cairo_vm::stdlib::collections::HashMap;
 use cairo_vm::types::errors::program_errors::ProgramError;
 use cairo_vm::utils::bigint_to_felt;
 use cairo_vm::vm::errors::memory_errors::MemoryError;
@@ -60,12 +61,12 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::fmt;
 use std::fmt::Display;
+use std::io;
 use std::io::Write;
 use std::path::PathBuf;
 use std::time::Instant;
-use std::{collections::HashMap, io};
 use sys_info::mem_info;
-use thiserror::Error;
+use thiserror_no_std::Error;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 enum FuncArg {
@@ -195,7 +196,6 @@ pub(crate) async fn run(
     memory_file: &Option<PathBuf>,
     args: &FuncArgs,
 ) -> Result<ReturnValueVec, Error> {
-
     // Get initial memory usage
     let initial_mem = match mem_info() {
         Ok(mem) => mem,
@@ -209,7 +209,6 @@ pub(crate) async fn run(
     };
     // Start measuring time
     let start_time = Instant::now();
-
 
     let layout = "all_cairo";
     let proof_mode = true;
@@ -865,5 +864,3 @@ fn get_function_builtins(
     builtins.reverse();
     (builtins, builtin_offset)
 }
-
-
