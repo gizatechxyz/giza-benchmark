@@ -11,6 +11,9 @@ mod data;
 mod orion;
 mod utils;
 
+#[global_allocator]
+static GLOBAL: jemallocator::Jemalloc = jemallocator::Jemalloc;
+
 #[tokio::main]
 async fn main() {
     let matches = App::new("Orion Benchmark")

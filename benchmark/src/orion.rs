@@ -1,3 +1,4 @@
+use jemalloc_ctl::{epoch, stats};
 use std::time::Instant;
 
 use cairo_lang_sierra::ProgramParser;
@@ -95,31 +96,33 @@ pub(crate) async fn benchmark_orion(
     }
 }
 
-fn start_metrics() -> (Instant, Option<u64>) {
-    // Start timing
+fn update_epoch() -> Result<(), String> {
+    epoch::advance().map(|_| ()).map_err(|e| e.to_string())
+}
+
+fn get_allocated() -> Result<usize, String> {
+    stats::allocated::read().map_err(|e| e.to_string())
+}
+
+fn start_metrics() -> (Instant, usize) {
     let start_time = Instant::now();
-    // Get initial memory usage
-    let mem_before = sys_info::mem_info().ok().map(|info| info.free);
+    update_epoch().expect("Failed to update jemalloc epoch");
+    let mem_before = get_allocated().expect("Failed to read allocated memory");
 
     (start_time, mem_before)
 }
 
-fn finalize_metrics(start_time: Instant, mem_before: Option<u64>) -> Metrics {
-    // End timing
+fn finalize_metrics(start_time: Instant, mem_before: usize) -> Metrics {
     let end_time = Instant::now();
     let exec_time = end_time.duration_since(start_time).as_secs_f64();
 
-    // Get final memory usage
-    let mem_after = sys_info::mem_info().ok().map(|info| info.free);
-
-    // Calculate memory usage difference, clamping to 0 to avoid underflow
-    let memory_usage = mem_before
-        .and_then(|before| mem_after.map(|after| before.saturating_sub(after)))
-        .unwrap_or(0);
+    update_epoch().expect("Failed to update jemalloc epoch");
+    let mem_after = get_allocated().expect("Failed to read allocated memory");
+    let memory_usage_bytes = mem_after.saturating_sub(mem_before);
+    let memory_usage_kb = memory_usage_bytes as f64 / 1024.0; // convert to KB
 
     Metrics {
         exec_time,
-        memory_usage,
+        memory_usage: memory_usage_kb as u64, 
     }
 }
-
