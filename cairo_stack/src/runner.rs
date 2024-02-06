@@ -64,20 +64,18 @@ use std::fmt::Display;
 use std::io;
 use std::io::Write;
 use std::path::PathBuf;
-use std::time::Instant;
-use sys_info::mem_info;
 use thiserror_no_std::Error;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-enum FuncArg {
+pub enum FuncArg {
     Array(Vec<Felt252>),
     Single(Felt252),
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub(crate) struct FuncArgs(Vec<FuncArg>);
+pub struct FuncArgs(Vec<FuncArg>);
 
-pub(crate) fn process_args(value: &str) -> Result<FuncArgs, String> {
+pub fn process_args(value: &str) -> Result<FuncArgs, String> {
     if value.is_empty() {
         return Ok(FuncArgs::default());
     }
@@ -190,26 +188,12 @@ impl FileWriter {
     }
 }
 
-pub(crate) async fn run(
+pub async fn run(
     sierra_program: &SierraProgram,
     trace_file: &Option<PathBuf>,
     memory_file: &Option<PathBuf>,
     args: &FuncArgs,
 ) -> Result<ReturnValueVec, Error> {
-    // Get initial memory usage
-    let initial_mem = match mem_info() {
-        Ok(mem) => mem,
-        Err(e) => {
-            eprintln!("Failed to get initial memory info: {:?}", e);
-            return Err(Error::IO(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Failed to get initial memory info",
-            )));
-        }
-    };
-    // Start measuring time
-    let start_time = Instant::now();
-
     let layout = "all_cairo";
     let proof_mode = true;
     let air_public_input: Option<PathBuf> = None;
@@ -453,27 +437,6 @@ pub(crate) async fn run(
     }
 
     let return_values = fetch_arrays_from_memory(&vm, return_values.clone());
-
-    // Calculate the execution duration
-    let duration = start_time.elapsed();
-
-    // Get final memory usage
-    let final_mem = match mem_info() {
-        Ok(mem) => mem,
-        Err(e) => {
-            eprintln!("Failed to get final memory info: {:?}", e);
-            return Err(Error::IO(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Failed to get final memory info",
-            )));
-        }
-    };
-
-    // Calculate the memory usage difference
-    let memory_usage = (final_mem.total - final_mem.free) - (initial_mem.total - initial_mem.free);
-
-    println!("🕑 Execution Time: {:?} \n", duration);
-    println!("💾 Memory Usage: {} KB \n", memory_usage);
 
     return_values
 }

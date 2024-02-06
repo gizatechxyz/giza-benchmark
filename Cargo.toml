@@ -1,10 +1,4 @@
-[package]
-name = "zkml-benchmark"
-version = "0.1.0"
-edition = "2021"
-
 [workspace]
-members = ["cairo_stack"]
-default-members = ["cairo_stack"]
 
-[dependencies]
+members = ["benchmark", "cairo_stack"]
+default-members = ["benchmark", "cairo_stack"]
