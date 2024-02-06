@@ -1,3 +1,5 @@
+use std::fs;
+
 use clap::{App, Arg};
 use tokio; // Ensure tokio is included for the async runtime
 
@@ -18,11 +20,11 @@ async fn main() {
             .help("Sets the path to the Sierra file")
             .takes_value(true)
             .required(true))
-        .arg(Arg::with_name("program_args")
-            .short('a')
-            .long("args")
-            .value_name("ARGS")
-            .help("Sets the program arguments")
+        .arg(Arg::with_name("args_file")
+            .short('a') 
+            .long("args-file")
+            .value_name("FILE")
+            .help("Sets the path to the file containing program arguments")
             .takes_value(true)
             .required(true))
         .arg(Arg::with_name("benchmark_path")
@@ -35,8 +37,12 @@ async fn main() {
         .get_matches();
 
     let sierra_file = matches.value_of("sierra_file").unwrap().to_string();
-    let program_args = matches.value_of("program_args").unwrap().to_string();
+    let args_file = matches.value_of("args_file").unwrap(); // Changed to match the new argument
     let benchmark_path = matches.value_of("benchmark_path").unwrap().to_string();
+
+    // Read the program arguments from the specified file
+    let program_args = fs::read_to_string(args_file)
+        .expect("Failed to read the program arguments file");
 
     let _benchmark = orion::benchmark_orion(
         &sierra_file,
