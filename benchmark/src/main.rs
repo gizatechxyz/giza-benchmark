@@ -4,7 +4,7 @@ use clap::{App, Arg};
 use data::Metrics;
 use tokio;
 
-use crate::consts::BENCHMARK_TITLE; // Ensure tokio is included for the async runtime
+use crate::consts::BENCHMARK_TITLE;
 
 mod consts;
 mod data;
@@ -63,8 +63,8 @@ fn print_metrics_table(runner: &Metrics, prover: &Metrics, verifier: &Metrics) {
     println!("{}", BENCHMARK_TITLE);
     println!("\n");
 
-    println!("| Type               | Run          | Prove         | Verify       |");
-    println!("| ------------------ | ------------ | ------------- | ------------ |");
+    println!("| Type                | Run           | Prove          | Verify         |");
+    println!("| ------------------- | ------------- | -------------- | -------------- |");
     println!(
         "| time (ms)          | {:13.6} | {:13.6} | {:13.6} |",
         runner.exec_time * 1000.0,   // Convert seconds to ms
@@ -72,7 +72,8 @@ fn print_metrics_table(runner: &Metrics, prover: &Metrics, verifier: &Metrics) {
         verifier.exec_time * 1000.0  // Convert seconds to ms
     );
     println!(
-        "| memory usage (KB)  | {:12.6} | {:13.6} | {:12.6} |",
+        "| memory usage (KB)  | {:13.6} | {:13.6} | {:13.6} |",
         runner.memory_usage, prover.memory_usage, verifier.memory_usage
     );
+    println!("\n");
 }

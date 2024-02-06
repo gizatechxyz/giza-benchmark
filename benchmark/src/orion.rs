@@ -115,8 +115,7 @@ fn finalize_metrics(start_time: Instant, mem_before: Option<u64>) -> Metrics {
     // Calculate memory usage difference
     let memory_usage = mem_before
         .and_then(|before| mem_after.map(|after| before - after))
-        .unwrap_or(0)
-        / 1024; // Convert to KB
+        .unwrap_or(0);
 
     Metrics {
         exec_time,
