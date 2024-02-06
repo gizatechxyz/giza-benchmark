@@ -112,9 +112,9 @@ fn finalize_metrics(start_time: Instant, mem_before: Option<u64>) -> Metrics {
     // Get final memory usage
     let mem_after = sys_info::mem_info().ok().map(|info| info.free);
 
-    // Calculate memory usage difference
+    // Calculate memory usage difference, clamping to 0 to avoid underflow
     let memory_usage = mem_before
-        .and_then(|before| mem_after.map(|after| before - after))
+        .and_then(|before| mem_after.map(|after| before.saturating_sub(after)))
         .unwrap_or(0);
 
     Metrics {
@@ -122,3 +122,4 @@ fn finalize_metrics(start_time: Instant, mem_before: Option<u64>) -> Metrics {
         memory_usage,
     }
 }
+
