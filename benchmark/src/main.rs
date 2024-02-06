@@ -58,22 +58,36 @@ async fn main() {
     print_metrics_table(&benchmark.runner, &benchmark.prover, &benchmark.verifier);
 }
 
-fn print_metrics_table(runner: &Metrics, prover: &Metrics, verifier: &Metrics) {
+fn print_metrics_table(runner: &Option<Metrics>, prover: &Metrics, verifier: &Metrics) {
     println!("\n");
     println!("{}", BENCHMARK_TITLE);
     println!("\n");
 
     println!("| Type                | Run           | Prove          | Verify         |");
     println!("| ------------------- | ------------- | -------------- | -------------- |");
+
+    // Handle the runner's execution time
+    let runner_exec_time = match runner {
+        Some(metrics) => format!("{:13.6}", metrics.exec_time * 1000.0), // Convert seconds to ms
+        None => "Not Defined".to_string(),
+    };
+
     println!(
-        "| time (ms)          | {:13.6} | {:13.6} | {:13.6} |",
-        runner.exec_time * 1000.0,   // Convert seconds to ms
+        "| time (ms)          | {} | {:13.6} | {:13.6} |",
+        runner_exec_time,
         prover.exec_time * 1000.0,   // Convert seconds to ms
         verifier.exec_time * 1000.0  // Convert seconds to ms
     );
+
+    // Handle the runner's memory usage
+    let runner_memory_usage = match runner {
+        Some(metrics) => format!("{:13.6}", metrics.memory_usage),
+        None => "Not Defined".to_string(),
+    };
+
     println!(
-        "| memory usage (KB)  | {:13.6} | {:13.6} | {:13.6} |",
-        runner.memory_usage, prover.memory_usage, verifier.memory_usage
+        "| memory usage (KB)  | {} | {:13.6} | {:13.6} |",
+        runner_memory_usage, prover.memory_usage, verifier.memory_usage
     );
     println!("\n");
 }

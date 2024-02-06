@@ -1,5 +1,5 @@
 pub(crate) struct Benchmark {
-    pub(crate) runner: Metrics,
+    pub(crate) runner: Option<Metrics>,
     pub(crate) prover: Metrics,
     pub(crate) verifier: Metrics,
 }

@@ -89,7 +89,7 @@ pub(crate) async fn benchmark_orion(
     let verifier_metrics = finalize_metrics(start_time, mem_before);
 
     Benchmark {
-        runner: runner_metrics,
+        runner: Some(runner_metrics),
         prover: prover_metrics,
         verifier: verifier_metrics,
     }
