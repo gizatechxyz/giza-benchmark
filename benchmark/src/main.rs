@@ -8,7 +8,7 @@ use crate::consts::BENCHMARK_TITLE;
 
 mod consts;
 mod data;
-mod orion;
+mod framework;
 mod utils;
 
 #[global_allocator]
@@ -56,7 +56,8 @@ async fn main() {
     let program_args =
         fs::read_to_string(args_file).expect("Failed to read the program arguments file");
 
-    let benchmark = orion::benchmark_orion(&sierra_file, &program_args, &benchmark_path).await;
+    let benchmark =
+        framework::orion::benchmark_orion(&sierra_file, &program_args, &benchmark_path).await;
 
     print_metrics_table(&benchmark.runner, &benchmark.prover, &benchmark.verifier);
 }
