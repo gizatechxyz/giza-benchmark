@@ -16,7 +16,7 @@ pub(crate) async fn benchmark_ezkl(
         "ezkl setup -M {} --vk-path={}/vk.key --pk-path={}/pk.key",
         compiled_ezkl, benchmark_path, benchmark_path
     );
-    let witness_command = format!("ezkl gen-witness -D {} -M {}", input, compiled_ezkl);
+    let witness_command = format!("ezkl gen-witness -D {} -M {} -O {}/witness.json", input, compiled_ezkl, benchmark_path);
     let prove_command = format!("ezkl prove -M {} --witness {}/witness.json --pk-path={}/pk.key --proof-path={}/model.proof", compiled_ezkl, benchmark_path, benchmark_path, benchmark_path);
     let verify_command = format!(
         "ezkl verify --proof-path={}/model.proof --settings-path={} --vk-path={}/vk.key",
