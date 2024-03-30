@@ -1,4 +1,20 @@
-[workspace]
+workspace = { members = ["crates/cairo_runner"] }
+[package]
+name = "giza-benchmark"
+version = "0.1.0"
+edition = "2021"
 
-members = ["benchmark", "cairo_stack"]
-default-members = ["benchmark", "cairo_stack"]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+cairo_runner = { path = "./crates/cairo_runner" }
+cairo-lang-sierra = { version = "2.6.3", default-features = false }
+serde_json = { version = "1.0", features = [
+    "arbitrary_precision",
+    "alloc",
+], default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+clap = "3.0"
+jemallocator = "0.5.4"
+jemalloc-ctl = "0.5.4"

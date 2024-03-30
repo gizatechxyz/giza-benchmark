@@ -1,0 +1,35 @@
+[package]
+name = "cairo_runner"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+arbitrary = { version = "1.3.0", features = ["derive"] }
+cairo-vm = { git = "https://github.com/glihm/cairo-vm.git", rev = "1da5269", features = [
+    "std",
+    "cairo-1-hints",
+    "arbitrary",
+] }
+cairo-lang-sierra-type-size = { version = "2.6.3", default-features = false }
+cairo-lang-sierra-ap-change = { version = "2.6.3", default-features = false }
+cairo-lang-sierra-gas = { version = "2.6.3", default-features = false }
+cairo-lang-casm = { version = "2.6.3", default-features = false }
+cairo-lang-compiler = { version = "2.6.3", default-features = false }
+cairo-lang-sierra-to-casm = { version = "2.6.3", default-features = false }
+cairo-lang-sierra = { version = "2.6.3", default-features = false }
+cairo-lang-utils = { version = "2.6.3", default-features = false }
+honggfuzz = "0.5.55"
+libfuzzer-sys = "0.4"
+num-bigint = "0.4"
+pyo3 = { version = "0.19.2", features = ["extension-module"] }
+serde = { version = "1.0.180", features = ["derive"] }
+serde_json = "1.0.104"
+itertools = "0.11.0"
+clap = { version = "4.3.10", features = ["derive"] }
+thiserror = { version = "1.0.40" }
+bincode = { version = "2.0.0-rc.3", default-features = false, features = [
+    "serde",
+] }
+num-traits = { version = "0.2", default-features = false }

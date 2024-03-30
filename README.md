@@ -4,10 +4,10 @@
 
 ### Orion
 ```bash
-./target/release/benchmark -f orion -p models/mlp/orion/network.sierra -i models/mlp/orion/network.input -b results/mlp/orion
+./target/release/zkml-benchmark -f orion -p benchmarks/mnist/orion/network.sierra.json -i benchmarks/mnist/orion/input.txt -b benchmarks/mnist/orion
 ```
 
 ### EZKL
 ```bash
-./target/release/benchmark -f ezkl -p models/mlp/ezkl/network.ezkl -i models/mlp/ezkl/input.json -s models/mlp/ezkl/settings.json -b results/mlp/ezkl
+./target/release/giza-benchmark -f ezkl -p benchmark/mnist/ezkl/network.ezkl -i benchmark/mnist/ezkl/input.json -s benchmark/mnist/ezkl/settings.json -b benchmark/mnist/ezkl
 ```
