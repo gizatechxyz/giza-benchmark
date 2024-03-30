@@ -103,7 +103,7 @@ fn print_metrics_table(runner: &Option<Metrics>, prover: &Metrics, verifier: &Me
     println!("{}", consts::BENCHMARK_TITLE);
     println!("\n");
 
-    println!("| Type                | Run           | Prove          | Verify         |");
+    println!("| Metric              | Run           | Prove          | Verify         |");
     println!("| ------------------- | ------------- | -------------- | -------------- |");
 
     // Handle the runner's execution time

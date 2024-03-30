@@ -1,1 +1,5 @@
 /target
+
+**.proof
+**.trace
+**.memory
