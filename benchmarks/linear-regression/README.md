@@ -10,6 +10,6 @@ This section will benchmark a simple Linear Regression model.
 
 ### Orion Cairo
 
-| Type      | Run       | Prove       | Verify     |
+| Metric    | Run       | Prove       | Verify     |
 | --------- | --------- | ----------- | ---------- |
 | time (ms) | 87.051083 | 6922.562292 | 251.617167 |
