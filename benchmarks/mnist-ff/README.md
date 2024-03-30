@@ -2,11 +2,13 @@
 
 This section will benchmark a simple MNIST Feedforward Neural Network. 
 
-![mnist ff netron](mnist-ff.onnx.png)
+![graph netron](mnist-ff.onnx.png)
 
 ## Results
 
 ℹ️ The results has been done on an Apple M2 Max.
+
+### Orion Cairo
 
 | Metric    | Run        | Prove        | Verify      |
 | --------- | ---------- | ------------ | ----------- |
