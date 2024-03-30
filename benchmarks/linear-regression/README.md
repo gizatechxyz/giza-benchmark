@@ -6,7 +6,7 @@ This section will benchmark a simple Linear Regression model.
 
 ## Results
 
-ℹ️ The results has been done on an Apple M2 Max.
+ℹ️ The benchmarks has been done on an Apple M2 Max.
 
 ### Orion Cairo
 
