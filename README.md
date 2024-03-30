@@ -1,10 +1,10 @@
-# ZKML Benchmark
+# Giza Benchmark
 
 ## Usage
 
 ### Orion
 ```bash
-./target/release/zkml-benchmark -f orion -p benchmarks/mnist/orion/network.sierra.json -i benchmarks/mnist/orion/input.txt -b benchmarks/mnist/orion
+./target/release/giza-benchmark -f orion -p benchmarks/mnist/orion/network.sierra.json -i benchmarks/mnist/orion/input.txt -b benchmarks/mnist/orion
 ```
 
 ### EZKL
