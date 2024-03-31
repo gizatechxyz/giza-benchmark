@@ -101,7 +101,7 @@ pub fn cairo_run_program(
         get_type_size_map(sierra_program, &sierra_program_registry).unwrap_or_default();
 
     let sierra_to_casm_config = SierraToCasmConfig {
-        gas_usage_check: true,
+        gas_usage_check: false,
         max_bytecode_size: 4_089_446,
     };
 

@@ -46,7 +46,7 @@ pub(crate) async fn benchmark(
         cairo_pie_output: None,
         args: program_args,
         print_output: false,
-        append_return_values: true,
+        append_return_values: false,
     };
 
     // ================ RUNNER ================
