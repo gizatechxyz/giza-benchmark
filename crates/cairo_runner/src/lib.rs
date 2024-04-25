@@ -204,7 +204,7 @@ impl FileWriter {
     }
 }
 
-pub fn run(sierra_program: Program, args: Args) -> Result<Option<String>, Error> {
+pub fn run(sierra_program: Program, args: Args) -> Result<(Option<String>, usize), Error> {
     let cairo_run_config = Cairo1RunConfig {
         proof_mode: args.proof_mode,
         serialize_output: args.print_output,
@@ -216,7 +216,7 @@ pub fn run(sierra_program: Program, args: Args) -> Result<Option<String>, Error>
         append_return_values: args.append_return_values,
     };
 
-    let (runner, vm, _, serialized_output) =
+    let (runner, vm, _, serialized_output, n_steps) =
         cairo_run::cairo_run_program(&sierra_program, cairo_run_config)?;
 
     if let Some(file_path) = args.air_public_input {
@@ -275,5 +275,5 @@ pub fn run(sierra_program: Program, args: Args) -> Result<Option<String>, Error>
         memory_writer.flush()?;
     }
 
-    Ok(serialized_output)
+    Ok((serialized_output, n_steps))
 }

@@ -78,27 +78,38 @@ async fn main() {
                 &benchmark_path,
             )
             .await;
-            print_metrics_table(&benchmark.runner, &benchmark.prover, &benchmark.verifier);
+            print_metrics_table(
+                &benchmark.runner,
+                &benchmark.prover,
+                &benchmark.verifier,
+                benchmark.n_steps,
+            );
         }
         "ezkl" => {
             let settings = matches
                 .value_of("settings")
                 .expect("Settings file is required for EZKL benchmarking")
                 .to_string();
-            let benchmark = framework::ezkl::benchmark(
-                &compiled_program,
-                &input,
-                &settings,
-                &benchmark_path,
-            )
-            .await;
-            print_metrics_table(&None, &benchmark.prover, &benchmark.verifier); // Assuming there's no runner metrics for EZKL
+            let benchmark =
+                framework::ezkl::benchmark(&compiled_program, &input, &settings, &benchmark_path)
+                    .await;
+            print_metrics_table(
+                &None,
+                &benchmark.prover,
+                &benchmark.verifier,
+                benchmark.n_steps,
+            ); // Assuming there's no runner metrics for EZKL
         }
         _ => println!("Invalid framework specified. Please choose 'orion' or 'ezkl'."),
     }
 }
 
-fn print_metrics_table(runner: &Option<Metrics>, prover: &Metrics, verifier: &Metrics) {
+fn print_metrics_table(
+    runner: &Option<Metrics>,
+    prover: &Metrics,
+    verifier: &Metrics,
+    n_steps: Option<usize>,
+) {
     println!("\n");
     println!("{}", consts::BENCHMARK_TITLE);
     println!("\n");
@@ -113,7 +124,7 @@ fn print_metrics_table(runner: &Option<Metrics>, prover: &Metrics, verifier: &Me
     };
 
     println!(
-        "| time (ms)          | {} | {:13.6} | {:13.6} |",
+        "| time (ms)           | {:<14} | {:13.6} | {:13.6} |",
         runner_exec_time,
         prover.exec_time * 1000.0,   // Convert seconds to ms
         verifier.exec_time * 1000.0  // Convert seconds to ms
@@ -126,8 +137,20 @@ fn print_metrics_table(runner: &Option<Metrics>, prover: &Metrics, verifier: &Me
     };
 
     println!(
-        "| memory usage (KB)  | {} | {:13.6} | {:13.6} |",
+        "| memory usage (KB)   | {:<14} | {:13.6} | {:13.6} |",
         runner_memory_usage, prover.memory_usage, verifier.memory_usage
     );
+
+    // Handle the runner's execution time
+    let steps = match n_steps {
+        Some(metric) => format!("{:13.6}", metric),
+        None => "Not Defined".to_string(),
+    };
+
+    println!(
+        "| n_steps             | {:<14} | {:<14} | {:<14} |",
+        steps, "-", "-"
+    );
+
     println!("\n");
 }

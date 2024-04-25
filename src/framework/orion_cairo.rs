@@ -51,8 +51,9 @@ pub(crate) async fn benchmark(
 
     // ================ RUNNER ================
     let (start_time, mem_before) = start_metrics();
-    let _run =
-        run(program, args).map_err(|e| format!("Encountered an error with Cairo runner: {:?}", e));
+    let (_, n_steps) = run(program, args)
+        .map_err(|e| format!("Encountered an error with Cairo runner: {:?}", e))
+        .expect("Run VM");
     let runner_metrics = finalize_metrics(start_time, mem_before);
 
     // ================ PROVER ================
@@ -81,5 +82,6 @@ pub(crate) async fn benchmark(
         runner: Some(runner_metrics),
         prover: prover_metrics,
         verifier: verify_metrics,
+        n_steps: Some(n_steps),
     }
 }

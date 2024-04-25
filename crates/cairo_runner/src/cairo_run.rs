@@ -92,6 +92,7 @@ pub fn cairo_run_program(
         VirtualMachine,
         Vec<MaybeRelocatable>,
         Option<String>,
+        usize,
     ),
     Error,
 > {
@@ -266,8 +267,10 @@ pub fn cairo_run_program(
     }
 
     runner.relocate(&mut vm, true)?;
+    let ressources = runner.get_execution_resources(&vm)?;
+    let n_steps = ressources.n_steps;
 
-    Ok((runner, vm, return_values, serialized_output))
+    Ok((runner, vm, return_values, serialized_output, n_steps))
 }
 
 fn additional_initialization(vm: &mut VirtualMachine, data_len: usize) -> Result<(), Error> {

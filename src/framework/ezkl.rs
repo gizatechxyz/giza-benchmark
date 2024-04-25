@@ -72,5 +72,6 @@ pub(crate) async fn benchmark(
         runner: None,
         prover: prover_metrics,
         verifier: verify_metrics,
+        n_steps: None,
     }
 }
