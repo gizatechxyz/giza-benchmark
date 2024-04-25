@@ -45,16 +45,16 @@ pub(crate) async fn benchmark(
         air_private_input: None,
         cairo_pie_output: None,
         args: program_args,
-        print_output: false,
+        print_output: true,
         append_return_values: false,
     };
 
     // ================ RUNNER ================
     let (start_time, mem_before) = start_metrics();
-    let (_, n_steps) = run(program, args)
+    let (output, n_steps) = run(program, args)
         .map_err(|e| format!("Encountered an error with Cairo runner: {:?}", e))
         .expect("Run VM");
-    let runner_metrics = finalize_metrics(start_time, mem_before);
+    let runner_metrics: crate::data::Metrics = finalize_metrics(start_time, mem_before);
 
     // ================ PROVER ================
     let (start_time, mem_before) = start_metrics();
@@ -77,6 +77,8 @@ pub(crate) async fn benchmark(
         .expect("failed to execute prove command");
     assert!(verify_status.success(), "Prove command failed");
     let verify_metrics = finalize_metrics(start_time, mem_before);
+
+    println!("\nProgram result: {:?}", output.unwrap());
 
     Benchmark {
         runner: Some(runner_metrics),
