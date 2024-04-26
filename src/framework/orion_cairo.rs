@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use cairo_lang_sierra::program::VersionedProgram;
-use cairo_runner::{process_args, run, Args};
+use cairo_runner::{runner::run, utils::process_args, Args};
 use tokio::process::Command;
 
 use crate::{
@@ -36,7 +36,20 @@ pub(crate) async fn benchmark(
     let program = program.program;
     let program_args = process_args(program_args).expect("Failed to process provided arguments");
 
-    let args = Args {
+    let args_no_proof_mode = Args {
+        trace_file: None,
+        memory_file: None,
+        layout: "all_cairo".to_string(),
+        proof_mode: false,
+        air_public_input: None,
+        air_private_input: None,
+        cairo_pie_output: None,
+        args: program_args.clone(),
+        print_output: true,
+        append_return_values: false,
+    };
+
+    let args_proof_mode = Args {
         trace_file: Some(PathBuf::from(trace_path)),
         memory_file: Some(PathBuf::from(memory_path)),
         layout: "all_cairo".to_string(),
@@ -45,16 +58,21 @@ pub(crate) async fn benchmark(
         air_private_input: None,
         cairo_pie_output: None,
         args: program_args,
-        print_output: true,
+        print_output: false,
         append_return_values: false,
     };
 
     // ================ RUNNER ================
     let (start_time, mem_before) = start_metrics();
-    let (output, n_steps) = run(program, args)
+    let (output, n_steps) = run(program.clone(), args_no_proof_mode)
         .map_err(|e| format!("Encountered an error with Cairo runner: {:?}", e))
         .expect("Run VM");
     let runner_metrics: crate::data::Metrics = finalize_metrics(start_time, mem_before);
+
+    // Re-run in proof mode
+    run(program, args_proof_mode)
+        .map_err(|e| format!("Encountered an error with Cairo runner: {:?}", e))
+        .expect("Run VM");
 
     // ================ PROVER ================
     let (start_time, mem_before) = start_metrics();
