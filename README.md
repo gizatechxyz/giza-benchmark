@@ -1,6 +1,6 @@
 # Giza Benchmark
 
-A tool to run ZKML benchmarks on Orion and EZKL frameworks.
+A tool to run Orion/Giza  benchmarks.
 
 ## Prerequisites
 
@@ -18,14 +18,8 @@ cargo install --path .
 
 ### Orion
 ```bash
-giza-benchmark -f orion -p benchmarks/mnist-ff/orion/network.sierra.json -i benchmarks/mnist-ff/orion/input.txt -b benchmarks/mnist-ff/orion
+giza-benchmark cargo run -- -p examples/xgb/xgb_inf.sierra.json -i examples/xgb/input.txt -b examples/xgb
 ```
 
-### EZKL
-```bash
-giza-benchmark -f ezkl -p benchmark/mnist-ff/ezkl/network.ezkl -i benchmark/mnist-ff/ezkl/input.json -s benchmark/mnist-ff/ezkl/settings.json -b benchmark/mnist-ff/ezkl
-```
-
-## Results
-
-You can find some results in `benchmarks` directory.
+## TODO
+We plan to support more ZKML frameworks in a near future.

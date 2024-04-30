@@ -18,20 +18,11 @@ async fn main() {
         .author("Your Name <your_email@example.com>")
         .about("Benchmarks performance of different frameworks")
         .arg(
-            Arg::with_name("framework")
-                .short('f')
-                .long("framework")
-                .value_name("FRAMEWORK")
-                .help("Specifies the framework to benchmark ('orion' or 'ezkl')")
-                .takes_value(true)
-                .required(true),
-        )
-        .arg(
             Arg::with_name("compiled_program")
                 .short('p')
                 .long("compiled-program")
                 .value_name("FILE")
-                .help("Sets the path to the compiled program file (.sierra for Orion, .ezkl for EZKL)")
+                .help("Sets the path to the compiled program file (.sierra.json)")
                 .takes_value(true)
                 .required(true),
         )
@@ -40,17 +31,9 @@ async fn main() {
                 .short('i')
                 .long("input")
                 .value_name("FILE")
-                .help("Sets the path to the input file (args_file for Orion, input data for EZKL)")
+                .help("Sets the path to the input file")
                 .takes_value(true)
                 .required(true),
-        )
-        .arg(
-            Arg::with_name("settings")
-                .short('s')
-                .long("settings")
-                .value_name("FILE")
-                .help("Sets the path to the settings file (only required for EZKL)")
-                .takes_value(true)
         )
         .arg(
             Arg::with_name("benchmark_path")
@@ -63,45 +46,20 @@ async fn main() {
         )
         .get_matches();
 
-    let framework = matches.value_of("framework").unwrap();
     let compiled_program = matches.value_of("compiled_program").unwrap().to_string();
     let input = matches.value_of("input").unwrap().to_string();
     let benchmark_path = matches.value_of("benchmark_path").unwrap().to_string();
 
-    match framework {
-        "orion" => {
-            let program_args =
-                fs::read_to_string(&input).expect("Failed to read the program arguments file");
-            let benchmark = framework::orion_cairo::benchmark(
-                &compiled_program,
-                &program_args,
-                &benchmark_path,
-            )
-            .await;
-            print_metrics_table(
-                &benchmark.runner,
-                &benchmark.prover,
-                &benchmark.verifier,
-                benchmark.n_steps,
-            );
-        }
-        "ezkl" => {
-            let settings = matches
-                .value_of("settings")
-                .expect("Settings file is required for EZKL benchmarking")
-                .to_string();
-            let benchmark =
-                framework::ezkl::benchmark(&compiled_program, &input, &settings, &benchmark_path)
-                    .await;
-            print_metrics_table(
-                &None,
-                &benchmark.prover,
-                &benchmark.verifier,
-                benchmark.n_steps,
-            ); // Assuming there's no runner metrics for EZKL
-        }
-        _ => println!("Invalid framework specified. Please choose 'orion' or 'ezkl'."),
-    }
+    let program_args =
+        fs::read_to_string(&input).expect("Failed to read the program arguments file");
+    let benchmark =
+        framework::orion_cairo::benchmark(&compiled_program, &program_args, &benchmark_path).await;
+    print_metrics_table(
+        &benchmark.runner,
+        &benchmark.prover,
+        &benchmark.verifier,
+        benchmark.n_steps,
+    );
 }
 
 fn print_metrics_table(
