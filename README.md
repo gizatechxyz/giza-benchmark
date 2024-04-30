@@ -17,7 +17,7 @@ cargo install --path .
 ## Usage Example
 
 ```bash
-giza-benchmark cargo run -- -p examples/xgb/xgb_inf.sierra.json -i examples/xgb/input.txt -b examples/xgb
+giza-benchmark -p examples/xgb/xgb_inf.sierra.json -i examples/xgb/input.txt -b examples/xgb
 ```
 
 ## TODO
