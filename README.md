@@ -16,7 +16,6 @@ cargo install --path .
 
 ## Usage Example
 
-### Orion
 ```bash
 giza-benchmark cargo run -- -p examples/xgb/xgb_inf.sierra.json -i examples/xgb/input.txt -b examples/xgb
 ```
